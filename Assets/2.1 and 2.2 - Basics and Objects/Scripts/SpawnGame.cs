@@ -11,9 +11,14 @@ using System.Collections.Generic;
     public KeyCode newGameKey = KeyCode.N;
     public KeyCode saveKey = KeyCode.S;
     public KeyCode loadKey = KeyCode.L;
+    public KeyCode destroyKey = KeyCode.X;
 
     string savePath;
     List<Shape> shapes;
+    public float CreationSpeed { get; set; }
+    public float DestructionSpeed { get; set; }
+    float creationProgress;
+    float destructionProgress;
 
     private void Awake() {
         shapes = new List<Shape>();      
@@ -30,6 +35,18 @@ using System.Collections.Generic;
         } else if (Input.GetKeyDown(loadKey)) {
             BeginNewGame();
             storage.Load(this);
+        }else if (Input.GetKeyDown(destroyKey)) {
+            DestroyShape();
+        }
+        creationProgress += Time.deltaTime * CreationSpeed;
+        while(creationProgress >= 1f) {
+            creationProgress -=1f;
+            CreateShape();
+        }
+        destructionProgress += Time.deltaTime * DestructionSpeed;
+        while(destructionProgress >= 1f){
+            destructionProgress -= 1f;
+            DestroyShape();
         }
     }
 
@@ -74,4 +91,13 @@ using System.Collections.Generic;
             instance.SetColor(Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.25f, 1f, 1f, 1f));
             shapes.Add(instance);
         }
+    void DestroyShape() {
+        if (shapes.Count <= 0)
+            return;
+        int index = Random.Range(0, shapes.Count);
+        shapeFactory.Reclaim(shapes[index]);
+        int lastIndex = shapes.Count - 1;
+        shapes[index] = shapes[lastIndex];
+        shapes.RemoveAt(lastIndex);
+    }
     }
