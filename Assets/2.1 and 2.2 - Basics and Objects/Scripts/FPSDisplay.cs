@@ -6,7 +6,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(FPSCounter))]
 public class FPSDisplay : MonoBehaviour {
 
-    public Text avgFPS, minFPS, maxFPS;
+    public Text avgFPS, minFPS, maxFPS, instances;
+    public NucleonSpawner nucleonSpawner;
     [SerializeField]
     private FPSColor[] coloring;
 
@@ -30,7 +31,7 @@ public class FPSDisplay : MonoBehaviour {
         Display(avgFPS, counter.AverageFPS);
         Display(minFPS, counter.LowestFPS);
         Display(maxFPS, counter.HighestFPS);
-        
+        instances.text = nucleonSpawner.objectsSpawned.ToString();
     }
 
     void Display(Text text, int fps){

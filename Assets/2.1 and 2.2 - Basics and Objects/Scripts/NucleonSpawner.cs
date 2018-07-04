@@ -8,7 +8,7 @@ public class NucleonSpawner : MonoBehaviour {
     public float spawnDistance;
     public Nucleon[] nucleonPrefabs;
     private float timeSinceLastSpawn;
-
+    public int objectsSpawned { get; private set; }
     private void FixedUpdate() {
         timeSinceLastSpawn += Time.deltaTime;
         if(timeSinceLastSpawn>=timeBetweenSpawns){
@@ -22,5 +22,6 @@ public class NucleonSpawner : MonoBehaviour {
         Nucleon prefab = nucleonPrefabs[Random.Range(0, nucleonPrefabs.Length)];
         Nucleon spawn = Instantiate<Nucleon>(prefab);
         spawn.transform.localPosition = Random.onUnitSphere * spawnDistance;
+        objectsSpawned++;
     }
 }
